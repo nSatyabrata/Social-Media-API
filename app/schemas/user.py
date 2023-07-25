@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 
@@ -13,3 +14,8 @@ class User(UserBase):
     id: int
     
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserUpdate(BaseModel):
+    username: Optional[str]
+    password: Optional[str]
