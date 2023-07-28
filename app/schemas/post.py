@@ -20,6 +20,6 @@ class Post(PostBase):
     created_at: datetime
     updated_at: datetime | None
     owner_id: int
-    user: User
+    owner: User
     
     model_config = ConfigDict(from_attributes=True)

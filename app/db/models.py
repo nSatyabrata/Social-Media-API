@@ -32,3 +32,18 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class Like(Base):
+    __tablename__ = "likes"
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True
+    )
+    post_id = Column(
+        Integer, 
+        ForeignKey("posts.id", ondelete="CASCADE"),
+        primary_key=True
+    )
+    like_post = Column(Boolean, nullable=False)

@@ -10,6 +10,7 @@ app = FastAPI()
 app.include_router(routers.auth_router)
 app.include_router(routers.user_router)
 app.include_router(routers.post_router)
+app.include_router(routers.like_router)
 
 @app.get("/")
 def root():

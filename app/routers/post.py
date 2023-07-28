@@ -24,7 +24,7 @@ def read_posts(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
 @post_router.get('/my', response_model=list[schemas.Post])
 def read_my_posts(
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user: schemas.User = Depends(get_current_user)
 ):
     return db_post.get_my_posts(db, current_user)
 
@@ -48,7 +48,7 @@ def read_post(id: int, db: Session = Depends(get_db)):
 def create_post(
     post: schemas.PostCreate, 
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user: schemas.User = Depends(get_current_user)
 ):
     return db_post.create_post(db, post, current_user)
 
@@ -58,13 +58,13 @@ def update_post(
     id: int, 
     post: schemas.PostCreate, 
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user: schemas.User = Depends(get_current_user)
 ):
     update_post = db.query(models.Post).filter(models.Post.id == id).first()
-    if update_post is None:
+    if update_post.owner_id != current_user.id:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Post not found"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authrozied to update."
         )
     return db_post.update_post(db, post, id, current_user)
 
@@ -73,16 +73,13 @@ def update_post(
 def delete_post(
     id: int, 
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user: schemas.User = Depends(get_current_user)
 ):
     delete_post = db.query(models.Post)\
-                    .filter(
-                        models.Post.id == id, 
-                        models.Post.owner_id == current_user.id
-                    ).first()
-    if delete_post is None:
+                    .filter(models.Post.id == id).first()
+    if delete_post.owner_id != current_user.id:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Post not found"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authrozied to delete."
         )
     db_post.delete_post(db, id, current_user)
