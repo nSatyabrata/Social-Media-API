@@ -21,5 +21,7 @@ class Post(PostBase):
     updated_at: datetime | None
     owner_id: int
     owner: User
+    likes: int
+    dislikes : int
     
     model_config = ConfigDict(from_attributes=True)

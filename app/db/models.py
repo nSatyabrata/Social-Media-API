@@ -22,6 +22,8 @@ class Post(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    likes = Column(Integer, server_default="0")
+    dislikes = Column(Integer, server_default="0")
 
     owner = relationship("User")
 

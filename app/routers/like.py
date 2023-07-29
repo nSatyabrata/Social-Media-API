@@ -30,7 +30,10 @@ def like_or_dislike_post(
     current_user: schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    post = db \
+            .query(models.Post) \
+            .filter(models.Post.id == post_id, models.Post.is_public == True) \
+            .first()
     if post is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -38,6 +41,7 @@ def like_or_dislike_post(
         )
     
     db_like.like_or_dislike_post(post_id, db, like, current_user)
+    return {"msg": "Successful."}
 
 
 @like_router.delete(
@@ -71,5 +75,5 @@ def delete_like_or_dislike(
                     f"for post {post_id} and user {current_user.id}")
         )
     
-    db_like.delete_like_or_dislike(post_id, db, current_user)
-
+    db_like.delete_like_or_dislike(db, current_user, liked_post, post)
+    return {"msg": "Successful."}
