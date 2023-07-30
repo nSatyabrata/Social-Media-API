@@ -7,3 +7,6 @@ email-validator
 alembic
 python-jose[cryptography]
 python-multipart
+alembic
+pydantic-settings
+python-dotenv

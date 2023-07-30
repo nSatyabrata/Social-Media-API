@@ -7,7 +7,7 @@ from app import schemas
 from app.db import db_user
 from app.db import models
 from app.db.database import get_db
-from app.authentication.auth import get_current_user
+from app.auth import get_current_user
 
 
 __all__ = ['user_router']

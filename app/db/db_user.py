@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.db import models
 from app.schemas import UserCreate, UserUpdate
-from app.authentication.auth import get_password_hash
+from app.auth import get_password_hash
 
 
 def get_user(db: Session, user_id: int):
